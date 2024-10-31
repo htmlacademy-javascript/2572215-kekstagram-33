@@ -10,8 +10,8 @@ function checkPalindrome(str) {
 
 function extractDigit(input) {
   const extract = (str) => {
-    let res = '';
-    for (let i = 0; i < str.length; i++) {
+    const res = '';
+    for (const i = 0; i < str.length; i++) {
       if (str[i] >= '0' && str[i] <= '9') {
         res += str[i];
       }
@@ -29,4 +29,20 @@ function extractDigit(input) {
     case 'string':
       return Number(extract(input));
   }
+}
+
+function checkMeetings(startWork, endWork, startMeeting, meetingDuration) {
+  const start = startWork.split(':');
+  const end = endWork.split(':');
+  const meeting = startMeeting.split(':');
+
+  const startWorkTime = Number(start[0]) * 60 + Number(start[1]);
+  const endWorkTime = Number(end[0]) * 60 + Number(end[1]);
+  const startMeetingTime = Number(meeting[0]) * 60 + Number(meeting[1]);
+  const endMeetingTime = startMeetingTime + meetingDuration;
+
+  if (startMeetingTime < startWorkTime || endMeetingTime > endWorkTime) {
+    return false;
+  }
+  return true;
 }
