@@ -1,3 +1,3 @@
-import { genPhotos } from './image/image';
+import { genPhotos } from './image/image.js';
 
 genPhotos(1);
