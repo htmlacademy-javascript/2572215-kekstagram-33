@@ -1,9 +1,20 @@
 import { genPhotos } from './image/image.js';
 
-const fragment = document.createDocumentFragment();
 const template = document.querySelector('#picture').content.querySelector('a');
 
-genPhotos().forEach((photo) => {
+function renderPictures() {
+  const photosData = genPhotos();
+  const fragment = document.createDocumentFragment();
+
+  photosData.forEach((photo) => {
+    const picture = createPicture(photo);
+    fragment.append(picture);
+  });
+
+  document.querySelector('.pictures').append(fragment);
+}
+
+function createPicture(photo) {
   const picture = template.cloneNode(true);
   const img = picture.querySelector('img');
 
@@ -11,8 +22,6 @@ genPhotos().forEach((photo) => {
   img.alt = photo.description;
   picture.querySelector('.picture__comments').textContent = photo.comments.length;
   picture.querySelector('.picture__likes').textContent = photo.likes;
-  fragment.append(picture);
-});
 
-document.querySelector('.pictures').append(fragment);
-
+  return picture;
+}
