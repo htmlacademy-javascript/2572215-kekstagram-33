@@ -1,3 +1,6 @@
+import { genPhotos } from '../image/image.js';
+import { renderPictures } from './render.js';
+
 const ESCAPE_KEY_CODE = 27;
 const SHOWN_COMMENTS_COUNT = 5;
 const bigPicture = document.querySelector('.big-picture');
@@ -26,7 +29,10 @@ const showComments = (list, comments, start, count) => {
   return end - start;
 };
 
-function showFullPictureHandler(photosData) {
+function showFullPictureHandler() {
+  const photosData = genPhotos();
+  renderPictures(photosData);
+
   return (event) => {
     const picture = event.target.closest('.picture');
     const photo = photosData[picture.dataset.idx];
