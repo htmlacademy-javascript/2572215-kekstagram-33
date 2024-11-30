@@ -34,6 +34,10 @@ function showFullPictureHandler() {
   renderPictures(photosData);
 
   return (event) => {
+    if (!event.target.classList.contains('picture')) {
+      return;
+    }
+
     const picture = event.target.closest('.picture');
     const photo = photosData[picture.dataset.idx];
     const img = bigPicture.querySelector('img');
