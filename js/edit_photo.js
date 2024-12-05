@@ -1,4 +1,4 @@
-import './validation.js';
+import { returnToDefault as textInputsToDefault } from './validation.js';
 
 const filePicker = document.querySelector('#upload-file');
 const editPhotoModal = document.querySelector('.img-upload__overlay');
@@ -21,12 +21,24 @@ const onEditPhotoEscPress = (evt) => {
   }
 };
 
+const returnToDefault = () => {
+  scaleValue.value = '100%';
+  editPhotoPreview.style.transform = 'scale(1)';
+  editPhotoPreview.style.filter = '';
+  effectLevelValue.value = '';
+  document.querySelector('#effect-none').checked = true;
+};
+
 function closeEditPhotoModal() {
   editPhotoModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onEditPhotoEscPress);
+  editPhotoCancel.removeEventListener('click', closeEditPhotoModal);
   filePicker.value = null;
+
+  returnToDefault();
+  textInputsToDefault();
 }
 
 filePicker.addEventListener('change', (evt) => {
@@ -155,3 +167,5 @@ effectLevelSlider.noUiSlider.on('update', () => {
       break;
   }
 });
+
+export { closeEditPhotoModal };
