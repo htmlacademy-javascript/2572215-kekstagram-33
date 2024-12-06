@@ -1,7 +1,8 @@
 const template = document.querySelector('#picture').content.querySelector('a');
+let fragment;
 
 function renderPictures(photosData) {
-  const fragment = document.createDocumentFragment();
+  fragment = document.createDocumentFragment();
 
   photosData.forEach((photo, idx) => {
     const picture = createPicture(photo, idx);
@@ -9,6 +10,10 @@ function renderPictures(photosData) {
   });
 
   document.querySelector('.pictures').append(fragment);
+}
+
+function clearPictures() {
+  document.querySelectorAll('.picture').forEach((picture) => picture.remove());
 }
 
 function createPicture(photo, idx) {
@@ -24,4 +29,4 @@ function createPicture(photo, idx) {
   return picture;
 }
 
-export {renderPictures};
+export {renderPictures, clearPictures};
