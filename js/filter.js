@@ -1,5 +1,6 @@
 /* eslint-disable quotes*/
-import { clearPictures, renderPictures } from "./gallery/render.js";
+import { clearPictures } from "./gallery/render.js";
+import { renderPicturesWithHandlers } from "./gallery/render_full_picture.js";
 
 const filters = document.querySelector(".img-filters");
 const filterButtons = filters.querySelectorAll(".img-filters__button");
@@ -36,7 +37,7 @@ const addFilter = (filter, cb) => {
 function onClickDefaultFilter(photosData) {
   addFilter(document.querySelector("#filter-default"), () => {
     clearPictures();
-    renderPictures(photosData);
+    renderPicturesWithHandlers(photosData);
   });
 }
 
@@ -44,7 +45,7 @@ function onClickRandomFilter(photosData) {
   addFilter(document.querySelector("#filter-random"), () => {
     clearPictures();
     const randomPhotos = photosData.slice().sort(() => Math.random() - 0.5);
-    renderPictures(randomPhotos);
+    renderPicturesWithHandlers(randomPhotos);
   });
 }
 
@@ -52,7 +53,7 @@ function onClickDiscussedFilter(photosData) {
   addFilter(document.querySelector("#filter-discussed"), () => {
     clearPictures();
     const discussedPhotos = photosData.slice().sort((a, b) => b.comments.length - a.comments.length);
-    renderPictures(discussedPhotos);
+    renderPicturesWithHandlers(discussedPhotos);
   });
 }
 
