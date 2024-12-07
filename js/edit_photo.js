@@ -141,31 +141,29 @@ effectList.addEventListener('change', (evt) => {
   }
 });
 
+const getFilterEffect = (effect, value) => {
+  switch (effect) {
+    case 'chrome':
+      return `grayscale(${value})`;
+    case 'sepia':
+      return `sepia(${value})`;
+    case 'marvin':
+      return `invert(${value}%)`;
+    case 'phobos':
+      return `blur(${value}px)`;
+    case 'heat':
+      return `brightness(${value})`;
+    default:
+      return '';
+  }
+};
+
 effectLevelSlider.noUiSlider.on('update', () => {
   const value = effectLevelSlider.noUiSlider.get();
   effectLevelValue.value = value;
 
   const effect = document.querySelector('.effects__radio:checked').value;
-  switch (effect) {
-    case 'chrome':
-      editPhotoPreview.style.filter = `grayscale(${value})`;
-      break;
-    case 'sepia':
-      editPhotoPreview.style.filter = `sepia(${value})`;
-      break;
-    case 'marvin':
-      editPhotoPreview.style.filter = `invert(${value}%)`;
-      break;
-    case 'phobos':
-      editPhotoPreview.style.filter = `blur(${value}px)`;
-      break;
-    case 'heat':
-      editPhotoPreview.style.filter = `brightness(${value})`;
-      break;
-    default:
-      editPhotoPreview.style.filter = '';
-      break;
-  }
+  editPhotoPreview.style.filter = getFilterEffect(effect, value);
 });
 
-export { closeEditPhotoModal };
+export { closeEditPhotoModal, getFilterEffect };

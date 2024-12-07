@@ -1,4 +1,5 @@
 /*eslint-disable quotes*/
+import { getFilterEffect } from "../edit_photo.js";
 import { renderPictures } from "./render.js";
 
 const ESCAPE_KEY_CODE = 27;
@@ -31,7 +32,7 @@ const showComments = (list, comments, start, count) => {
 
 function renderPicturesWithHandlers(photosData) {
   renderPictures(photosData);
-  const pictures = document.querySelectorAll('.pictures .picture');
+  const pictures = document.querySelectorAll(".pictures .picture");
 
   for (const picture of pictures) {
     picture.addEventListener("click", () => {
@@ -97,6 +98,39 @@ function renderPicturesWithHandlers(photosData) {
   }
 }
 
+function onClickPictureForPreview(src, effectLevel, data) {
+  const { description, hashtags, scale, effect } = data;
+  const img = bigPicture.querySelector("img");
+
+  return () => {
+    img.src = src;
+    img.alt = description;
+
+    if (effect !== 'none') {
+      img.style.filter = getFilterEffect(effect, effectLevel);
+    }
+    img.style.transform = `scale(${scale})`;
+
+    bigPicture.querySelector(".likes-count").textContent = 0;
+    bigPicture.querySelector(".social__comment-shown-count").textContent = 0;
+    bigPicture.querySelector(".social__comment-total-count").textContent = 0;
+    bigPicture.querySelector(
+      ".social__caption"
+    ).textContent = `${description} ${hashtags}`;
+
+    bigPicture.querySelector('.social__comments').innerHTML = '';
+    bigPicture.querySelector(".comments-loader").classList.add("hidden");
+
+    bigPicture.classList.remove("hidden");
+    document.querySelector("body").classList.add("modal-open");
+
+    bigPicture
+      .querySelector(".big-picture__cancel")
+      .addEventListener("click", closeFullPicture);
+    document.addEventListener("keydown", onPopupEscPress);
+  };
+}
+
 function closeFullPicture() {
   bigPicture.classList.add("hidden");
   document.querySelector("body").classList.remove("modal-open");
@@ -104,4 +138,4 @@ function closeFullPicture() {
   document.removeEventListener("keydown", onPopupEscPress);
 }
 
-export { renderPicturesWithHandlers };
+export { renderPicturesWithHandlers, onClickPictureForPreview };

@@ -1,3 +1,5 @@
+import { getFilterEffect } from '../edit_photo.js';
+
 const template = document.querySelector('#picture').content.querySelector('a');
 let fragment;
 
@@ -29,4 +31,21 @@ function createPicture(photo, idx) {
   return picture;
 }
 
-export {renderPictures, clearPictures};
+const editPhotoPreview = document.querySelector('.img-upload__preview img');
+function createPictureFromPreview(description, scale, effect, effectLevel) {
+  const picture = template.cloneNode(true);
+  const img = picture.querySelector('img');
+
+  img.src = editPhotoPreview.src;
+  img.alt = description;
+
+  if (effect !== 'none') {
+    img.style.filter = getFilterEffect(effect, effectLevel);
+  }
+
+  img.style.transform = `scale(${scale});`;
+
+  return picture;
+}
+
+export {renderPictures, clearPictures, createPictureFromPreview};
