@@ -44,6 +44,7 @@ pristine.addValidator(hashtagInput, checkDuplicate, ERR_MSGS.DUPLICATE_HASTAG);
 pristine.addValidator(hashtagInput, checkLimit, ERR_MSGS.LIMIT_HASTAG);
 pristine.addValidator(commentInput, checkLengthLimit, ERR_MSGS.LONG_COMMENT);
 
+
 [hashtagInput, commentInput].forEach((input) => {
   input.addEventListener('keydown', (evt) => {
     if (evt.keyCode === 27) {

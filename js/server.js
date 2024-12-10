@@ -70,10 +70,10 @@ const form = document.querySelector("#upload-select-image");
 const submitButton = form.querySelector('button[type="submit"]');
 
 form.addEventListener("submit", (evt) => {
-  evt.preventDefault();
   if (!validateForm()) {
     return;
   }
+  evt.preventDefault();
 
   const formData = new FormData(form);
   fetch(SERVER_URL, {
