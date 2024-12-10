@@ -1,11 +1,8 @@
 /* eslint-disable quotes */
 import { validateForm } from "./validation.js";
 import { closeEditPhotoModal } from "./edit_photo.js";
-import { onClickPictureForPreview } from "./gallery/render_full_picture.js";
-import { createPictureFromPreview } from "./gallery/render.js";
-
-const SERVER_URL = "https://32.javascript.htmlacademy.pro/kekstagram";
-const GET_DATA_ENDPOINT = `${SERVER_URL}/data`;
+import { createPictureFromPreview, onLoadedPictureClick } from "./gallery/render.js";
+import { GET_DATA_ENDPOINT, SERVER_URL } from "./constants.js";
 
 const errorGetTemplate = document
   .querySelector("#data-error")
@@ -27,13 +24,6 @@ const showGetError = (reason) => {
   }, 5000);
 };
 
-/*
-  Элемент сообщения, нужно разместить перед закрывающим тегом </body>.
-  Сообщение должно удаляться со страницы:
-  - после нажатия на кнопку с классом 'btn_class',
-  - по нажатию на клавишу Esc
-  - по клику на произвольную область экрана за пределами блока с сообщением.
-*/
 const showPostElement = (template, btnClass) => {
   const element = template.cloneNode(true);
   document.body.append(element);
@@ -105,7 +95,7 @@ form.addEventListener("submit", (evt) => {
 
       picture.addEventListener(
         "click",
-        onClickPictureForPreview(src,effectLevel, data)
+        onLoadedPictureClick(src,effectLevel, data)
       );
 
       document.querySelector(".pictures").append(picture);

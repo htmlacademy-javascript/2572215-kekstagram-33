@@ -1,3 +1,4 @@
+import { SCALE_MAX, SCALE_MIN, SCALE_STEP } from './constants.js';
 import { returnToDefault as textInputsToDefault } from './validation.js';
 
 const filePicker = document.querySelector('#upload-file');
@@ -63,9 +64,9 @@ filePicker.addEventListener('change', (evt) => {
 const onScaleControlClick = (evt) => {
   let scale = parseInt(scaleValue.value, 10);
   if (evt.target === scaleSmaller) {
-    scale = Math.max(25, scale - 25);
+    scale = Math.max(SCALE_MIN, scale - SCALE_STEP);
   } else if (evt.target === scaleBigger) {
-    scale = Math.min(100, scale + 25);
+    scale = Math.min(SCALE_MAX, scale + SCALE_STEP);
   }
 
   scaleValue.value = `${scale}%`;
