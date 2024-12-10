@@ -1,3 +1,4 @@
+import { SCALE_MAX, SCALE_MIN, SCALE_STEP } from './constants.js';
 import { returnToDefault as textInputsToDefault } from './validation.js';
 
 const filePicker = document.querySelector('#upload-file');
@@ -14,10 +15,10 @@ const effectLevelSlider = effectLevel.querySelector('.effect-level__slider');
 const effectLevelValue = effectLevel.querySelector('.effect-level__value');
 const effectList = document.querySelector('.effects__list');
 
-const onEditPhotoEscPress = (evt) => {
+const onPictureEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    closeEditPhotoModal();
+    onPhotoCancelClick();
   }
 };
 
@@ -29,12 +30,12 @@ const returnToDefault = () => {
   document.querySelector('#effect-none').checked = true;
 };
 
-function closeEditPhotoModal() {
+function onPhotoCancelClick() {
   editPhotoModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', onEditPhotoEscPress);
-  editPhotoCancel.removeEventListener('click', closeEditPhotoModal);
+  document.removeEventListener('keydown', onPictureEscKeydown);
+  editPhotoCancel.removeEventListener('click', onPhotoCancelClick);
   filePicker.value = null;
 
   returnToDefault();
@@ -49,8 +50,8 @@ filePicker.addEventListener('change', (evt) => {
   editPhotoModal.classList.remove('hidden');
   document.body.classList.add('modal-open');
   effectLevel.classList.add('hidden');
-  document.addEventListener('keydown', onEditPhotoEscPress);
-  editPhotoCancel.addEventListener('click', closeEditPhotoModal);
+  document.addEventListener('keydown', onPictureEscKeydown);
+  editPhotoCancel.addEventListener('click', onPhotoCancelClick);
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -63,9 +64,9 @@ filePicker.addEventListener('change', (evt) => {
 const onScaleControlClick = (evt) => {
   let scale = parseInt(scaleValue.value, 10);
   if (evt.target === scaleSmaller) {
-    scale = Math.max(25, scale - 25);
+    scale = Math.max(SCALE_MIN, scale - SCALE_STEP);
   } else if (evt.target === scaleBigger) {
-    scale = Math.min(100, scale + 25);
+    scale = Math.min(SCALE_MAX, scale + SCALE_STEP);
   }
 
   scaleValue.value = `${scale}%`;
@@ -141,31 +142,29 @@ effectList.addEventListener('change', (evt) => {
   }
 });
 
+const getFilterEffect = (effect, value) => {
+  switch (effect) {
+    case 'chrome':
+      return `grayscale(${value})`;
+    case 'sepia':
+      return `sepia(${value})`;
+    case 'marvin':
+      return `invert(${value}%)`;
+    case 'phobos':
+      return `blur(${value}px)`;
+    case 'heat':
+      return `brightness(${value})`;
+    default:
+      return '';
+  }
+};
+
 effectLevelSlider.noUiSlider.on('update', () => {
   const value = effectLevelSlider.noUiSlider.get();
   effectLevelValue.value = value;
 
   const effect = document.querySelector('.effects__radio:checked').value;
-  switch (effect) {
-    case 'chrome':
-      editPhotoPreview.style.filter = `grayscale(${value})`;
-      break;
-    case 'sepia':
-      editPhotoPreview.style.filter = `sepia(${value})`;
-      break;
-    case 'marvin':
-      editPhotoPreview.style.filter = `invert(${value}%)`;
-      break;
-    case 'phobos':
-      editPhotoPreview.style.filter = `blur(${value}px)`;
-      break;
-    case 'heat':
-      editPhotoPreview.style.filter = `brightness(${value})`;
-      break;
-    default:
-      editPhotoPreview.style.filter = '';
-      break;
-  }
+  editPhotoPreview.style.filter = getFilterEffect(effect, value);
 });
 
-export { closeEditPhotoModal };
+export { onPhotoCancelClick as closeEditPhotoModal, getFilterEffect };

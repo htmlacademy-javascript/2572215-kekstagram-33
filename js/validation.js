@@ -1,3 +1,5 @@
+import { COMMENT_SYMBOLS_LIMIT, ERR_MSGS, HASHTAG_REGEX, HASHTAGS_LIMIT } from './constants.js';
+
 const editPhotoForm = document.querySelector('fieldset.img-upload__text');
 const hashtagInput = editPhotoForm.querySelector('.text__hashtags');
 const commentInput = editPhotoForm.querySelector('.text__description');
@@ -9,39 +11,38 @@ const pristine = new Pristine(editPhotoForm, {
 });
 
 const hasDuplicates = (arr) => arr.length <= 1 ? false : new Set(arr).size !== arr.length;
-const hashtagRegex = /^#[a-zа-я0-9]{1,19}$/i;
 
-// Valid hashtag validator
-pristine.addValidator(hashtagInput, (value) => {
+const checkRegex = (value) => {
   if (value.trim() === '') {
     return true;
   }
 
   const hashtags = value.trim().split(' ');
-  return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
-}, 'Введен невалидный хэш-тег');
+  return hashtags.every((hashtag) => HASHTAG_REGEX.test(hashtag));
+};
 
-// Duplicate validator
-pristine.addValidator(hashtagInput, (value) => {
+const checkDuplicate = (value) => {
   const hashtags = value.trim().split(' ');
   if (hasDuplicates(hashtags)) {
     return false;
   }
   return true;
-}, 'Хэш-теги не должны повторяться');
+};
 
-// Max limit validator
-pristine.addValidator(hashtagInput, (value) => {
+const checkLimit = (value) => {
   const hashtags = value.trim().split(' ');
-  if (hashtags.length > 5) {
+  if (hashtags.length > HASHTAGS_LIMIT) {
     return false;
   }
   return true;
-}, 'Превышен максимальный лимит хэш-тегов');
+};
 
-// Comment validator
-pristine.addValidator(commentInput, (value) => value.length <= 140,
-  'Длина комментария не может составлять больше 140 символов');
+const checkLengthLimit = (value) => value.length <= COMMENT_SYMBOLS_LIMIT;
+
+pristine.addValidator(hashtagInput, checkRegex, ERR_MSGS.INVALID_HASHTAG);
+pristine.addValidator(hashtagInput, checkDuplicate, ERR_MSGS.DUPLICATE_HASTAG);
+pristine.addValidator(hashtagInput, checkLimit, ERR_MSGS.LIMIT_HASTAG);
+pristine.addValidator(commentInput, checkLengthLimit, ERR_MSGS.LONG_COMMENT);
 
 [hashtagInput, commentInput].forEach((input) => {
   input.addEventListener('keydown', (evt) => {
