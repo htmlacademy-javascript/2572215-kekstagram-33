@@ -15,10 +15,10 @@ const effectLevelSlider = effectLevel.querySelector('.effect-level__slider');
 const effectLevelValue = effectLevel.querySelector('.effect-level__value');
 const effectList = document.querySelector('.effects__list');
 
-const onEditPhotoEscPress = (evt) => {
+const onPictureEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    closeEditPhotoModal();
+    onPhotoCancelClick();
   }
 };
 
@@ -30,12 +30,12 @@ const returnToDefault = () => {
   document.querySelector('#effect-none').checked = true;
 };
 
-function closeEditPhotoModal() {
+function onPhotoCancelClick() {
   editPhotoModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
-  document.removeEventListener('keydown', onEditPhotoEscPress);
-  editPhotoCancel.removeEventListener('click', closeEditPhotoModal);
+  document.removeEventListener('keydown', onPictureEscKeydown);
+  editPhotoCancel.removeEventListener('click', onPhotoCancelClick);
   filePicker.value = null;
 
   returnToDefault();
@@ -50,8 +50,8 @@ filePicker.addEventListener('change', (evt) => {
   editPhotoModal.classList.remove('hidden');
   document.body.classList.add('modal-open');
   effectLevel.classList.add('hidden');
-  document.addEventListener('keydown', onEditPhotoEscPress);
-  editPhotoCancel.addEventListener('click', closeEditPhotoModal);
+  document.addEventListener('keydown', onPictureEscKeydown);
+  editPhotoCancel.addEventListener('click', onPhotoCancelClick);
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -167,4 +167,4 @@ effectLevelSlider.noUiSlider.on('update', () => {
   editPhotoPreview.style.filter = getFilterEffect(effect, value);
 });
 
-export { closeEditPhotoModal, getFilterEffect };
+export { onPhotoCancelClick as closeEditPhotoModal, getFilterEffect };
