@@ -1,4 +1,5 @@
 /* eslint-disable quotes*/
+import { RANDOM_COUNT_PHOTOS } from "./constants.js";
 import { clearPictures, renderPictures } from "./gallery/render.js";
 
 const filters = document.querySelector(".img-filters");
@@ -43,7 +44,7 @@ function onClickDefaultFilter(photosData) {
 function onClickRandomFilter(photosData) {
   addFilter(document.querySelector("#filter-random"), () => {
     clearPictures();
-    const randomPhotos = photosData.slice().sort(() => Math.random() - 0.5);
+    const randomPhotos = photosData.slice(0, RANDOM_COUNT_PHOTOS).sort(() => Math.random() - 0.5);
     renderPictures(randomPhotos);
   });
 }

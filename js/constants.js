@@ -1,3 +1,4 @@
+export const RANDOM_COUNT_PHOTOS = 10;
 export const SHOWN_COMMENTS_COUNT = 5;
 export const SCALE_STEP = 25;
 export const SCALE_MIN = 25;

@@ -3,6 +3,8 @@ import { showFilters } from '../filter.js';
 import { renderPictures } from './render.js';
 
 getPhotos().then((photosData) => {
-  showFilters(photosData);
-  renderPictures(photosData);
+  if (photosData) {
+    showFilters(photosData);
+    renderPictures(photosData);
+  }
 });
