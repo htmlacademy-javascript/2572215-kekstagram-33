@@ -1,4 +1,3 @@
-import { genPhotos } from '../image/image.js';
 import { renderPictures } from './render.js';
 
 const ESCAPE_KEY_CODE = 27;
@@ -29,16 +28,15 @@ const showComments = (list, comments, start, count) => {
   return end - start;
 };
 
-function showFullPictureHandler() {
-  const photosData = genPhotos();
+function showFullPictureHandler(photosData) {
   renderPictures(photosData);
 
   return (event) => {
-    if (!event.target.classList.contains('picture')) {
+    const picture = event.target.closest('.picture');
+    if (!picture) {
       return;
     }
 
-    const picture = event.target.closest('.picture');
     const photo = photosData[picture.dataset.idx];
     const img = bigPicture.querySelector('img');
     const commentsLength = photo.comments.length;
@@ -65,16 +63,16 @@ function showFullPictureHandler() {
 
     bigPicture.querySelector('.comments-loader').onclick = () => {
       const shownCommentsElement = bigPicture.querySelector('.social__comment-shown-count');
-      const photo = photosData[picture.dataset.idx];
-      const commentsLength = photo.comments.length;
+      const currPhoto = photosData[picture.dataset.idx];
+      const currCommentsLength = currPhoto.comments.length;
 
-      if (list.children.length < commentsLength) {
+      if (list.children.length < currCommentsLength) {
         const start = Number(shownCommentsElement.textContent);
-        const count = showComments(list, photo.comments, start, SHOWN_COMMENTS_COUNT);
+        const count = showComments(list, currPhoto.comments, start, SHOWN_COMMENTS_COUNT);
 
         shownCommentsElement.textContent = start + count;
 
-        if (list.children.length === commentsLength) {
+        if (list.children.length === currCommentsLength) {
           bigPicture.querySelector('.comments-loader').classList.add('hidden');
         }
       }
