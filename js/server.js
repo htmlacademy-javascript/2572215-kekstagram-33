@@ -28,7 +28,7 @@ const showPostElement = (template, btnClass) => {
   const element = template.cloneNode(true);
   document.body.append(element);
 
-  const onEscPress = (evt) => {
+  const onEscKeydown = (evt) => {
     if (evt.key === "Escape") {
       removeElement();
     }
@@ -42,11 +42,11 @@ const showPostElement = (template, btnClass) => {
 
   function removeElement() {
     element.remove();
-    document.removeEventListener("keydown", onEscPress);
+    document.removeEventListener("keydown", onEscKeydown);
     document.removeEventListener("click", onClick);
   }
 
-  document.addEventListener("keydown", onEscPress);
+  document.addEventListener("keydown", onEscKeydown);
   document.addEventListener("click", onClick);
 
   element
@@ -70,10 +70,10 @@ const form = document.querySelector("#upload-select-image");
 const submitButton = form.querySelector('button[type="submit"]');
 
 form.addEventListener("submit", (evt) => {
+  evt.preventDefault();
   if (!validateForm()) {
     return;
   }
-  evt.preventDefault();
 
   const formData = new FormData(form);
   fetch(SERVER_URL, {
@@ -100,6 +100,7 @@ form.addEventListener("submit", (evt) => {
 
       document.querySelector(".pictures").append(picture);
 
+      closeEditPhotoModal();
       showPostElement(successPostTemplate, "success__button");
     })
     .catch(() => {
@@ -110,7 +111,6 @@ form.addEventListener("submit", (evt) => {
     });
 
   submitButton.disabled = true;
-  closeEditPhotoModal();
 });
 
 export { getPhotos };

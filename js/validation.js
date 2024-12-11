@@ -23,18 +23,12 @@ const checkRegex = (value) => {
 
 const checkDuplicate = (value) => {
   const hashtags = value.trim().split(' ');
-  if (hasDuplicates(hashtags)) {
-    return false;
-  }
-  return true;
+  return !hasDuplicates(hashtags);
 };
 
 const checkLimit = (value) => {
   const hashtags = value.trim().split(' ');
-  if (hashtags.length > HASHTAGS_LIMIT) {
-    return false;
-  }
-  return true;
+  return !(hashtags.length > HASHTAGS_LIMIT);
 };
 
 const checkLengthLimit = (value) => value.length <= COMMENT_SYMBOLS_LIMIT;
